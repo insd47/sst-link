@@ -5,11 +5,7 @@ pub enum Error {
     #[error("failed to read SST resources: {0}")]
     Resource(#[from] sst_sdk::ResourceError),
 
-    /// The function has no link with this name.
-    #[error("`{0}` is not linked to this function")]
-    Missing(String),
-
-    /// The link exists but doesn't match the field's type.
-    #[error("`{name}` does not match its declared shape: {source}")]
-    Shape { name: String, source: serde_json::Error },
+    /// A link is missing or doesn't match its field's type. serde's message names the field.
+    #[error("linked resources don't match: {0}")]
+    Deserialize(#[from] serde_json::Error),
 }

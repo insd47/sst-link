@@ -2,8 +2,8 @@
 
 Typed SST resource links for Rust.
 
-Declare one struct per function that mirrors its `link` array, derive `Links`, and load it once at startup. Every field
-is required, so a missing link fails at cold start with its name — not halfway through a request.
+Declare one struct per function that mirrors its `link` array, derive `Deserialize` and `Links`, and load it once at
+startup. Every field is required, so a missing link fails at cold start — not halfway through a request.
 
 ```ts
 // sst.config.ts
@@ -14,12 +14,14 @@ new sst.aws.Function('Api', { handler: '.api', runtime: 'rust', link: [key, asse
 ```
 
 ```rust
+use serde::Deserialize;
 use sst_link::{Bucket, Links, Secret};
 
-#[derive(Links)]
+#[derive(Deserialize, Links)]
+#[serde(rename_all = "PascalCase")]
 struct Resources {
-    key: Secret,     // link "Key"
-    assets: Bucket,  // link "Assets"
+    key: Secret,    // link "Key"
+    assets: Bucket, // link "Assets"
 }
 
 let resources = Resources::load()?;
@@ -27,13 +29,15 @@ let resources = Resources::load()?;
 
 ## Naming
 
-A field reads the link named after it in PascalCase (`key` → `Key`, `registry_key` → `RegistryKey`). When a link's name
-doesn't follow its field, name it explicitly:
+`load` hands serde an object keyed by link name (`{ "Key": …, "Assets": … }`), so mapping fields to links is serde's
+job: `rename_all = "PascalCase"` for the usual case, `rename` for the odd one, and `default`, `flatten`, or anything else
+serde offers when you need it.
 
 ```rust
-#[derive(Links)]
+#[derive(Deserialize, Links)]
+#[serde(rename_all = "PascalCase")]
 struct Resources {
-    #[links(name = "RouterStorage")]
+    #[serde(rename = "RouterStorage")]
     storage: Bucket,
 }
 ```
@@ -61,7 +65,8 @@ struct Registry {
     audience: String,
 }
 
-#[derive(Links)]
+#[derive(Deserialize, Links)]
+#[serde(rename_all = "PascalCase")]
 struct Resources {
     registry: Registry,
 }
@@ -73,9 +78,14 @@ struct Resources {
 
 `load` fails with `sst_link::Error`:
 
-- `Missing(name)` — the function has no link with that name.
-- `Shape { name, source }` — the link exists but doesn't deserialize into the field's type.
+- `Deserialize(_)` — a link is missing or doesn't match its field's type. serde's message names the field
+  (``missing field `Key` ``).
 - `Resource(_)` — SST's resource payload couldn't be read or decrypted.
+
+## Publishing
+
+Bump `version` in the root `Cargo.toml` (and the `=` pin on `sst-link-derive` with it) and push to `main`.
+[release-plz](https://release-plz.dev) publishes whatever version isn't on crates.io yet, then tags and releases it.
 
 ## License
 

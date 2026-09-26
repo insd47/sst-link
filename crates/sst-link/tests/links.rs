@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use sst_link::{App, Bucket, Dynamo, Error, Function, Links, Realtime, Router, Secret};
+use sst_link::{App, Bucket, Dynamo, Function, Links, Realtime, Router, Secret};
 use std::process::Command;
 
 #[derive(Deserialize)]
@@ -7,7 +7,8 @@ struct Registry {
     audience: String,
 }
 
-#[derive(Links)]
+#[derive(Deserialize, Links)]
+#[serde(rename_all = "PascalCase")]
 struct Resources {
     app: App,
     table: Dynamo,
@@ -16,7 +17,7 @@ struct Resources {
     router: Router,
     key: Secret,
     registry: Registry,
-    #[links(name = "RouterStorage")]
+    #[serde(rename = "RouterStorage")]
     storage: Bucket,
     r#type: Bucket,
 }
@@ -66,7 +67,7 @@ fn names_the_missing_link() {
     if std::env::var(CHILD).is_ok() {
         let error = Resources::load().err().expect("missing links must fail");
 
-        assert!(matches!(&error, Error::Missing(name) if name == "App"), "{error}");
+        assert!(error.to_string().contains("missing field `App`"), "{error}");
         return;
     }
 
@@ -78,7 +79,7 @@ fn names_the_misshapen_link() {
     if std::env::var(CHILD).is_ok() {
         let error = Resources::load().err().expect("misshapen links must fail");
 
-        assert!(matches!(&error, Error::Shape { name, .. } if name == "App"), "{error}");
+        assert!(error.to_string().contains("missing field `stage`"), "{error}");
         return;
     }
 

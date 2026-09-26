@@ -1,5 +1,0 @@
-[workspace]
-# 버전은 Cargo.toml 이 정한다. release 는 레지스트리에 없는 버전만 발행하고, 태그·GitHub 릴리스는 만들지 않는다.
-git_tag_enable = false
-git_release_enable = false
-changelog_update = false
