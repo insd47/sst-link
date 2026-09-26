@@ -1,0 +1,18 @@
+[package]
+name = "sst-link"
+description = "Load every SST link into one typed struct. Missing links fail at cold start, by name."
+readme = "../../README.md"
+keywords = ["sst", "aws", "lambda", "serverless", "derive"]
+categories = ["config", "web-programming"]
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sst-link-derive.workspace = true
+sst_sdk.workspace = true
+thiserror.workspace = true
