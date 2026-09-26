@@ -10,8 +10,8 @@
 //! #[derive(Deserialize, Links)]
 //! #[serde(rename_all = "PascalCase")]
 //! struct Resources {
-//!     key: Secret,                       // link "Key"
-//!     #[serde(rename = "RouterStorage")] // a link whose name doesn't follow the field
+//!     key: Secret, // link "Key"
+//!     #[serde(rename = "RouterStorage")]
 //!     storage: Bucket,
 //! }
 //!
@@ -19,9 +19,7 @@
 //! # Ok::<(), sst_link::Error>(())
 //! ```
 //!
-//! Links are keyed by their SST names, and serde does the mapping, so everything serde offers (`rename_all`, `rename`,
-//! `default`, `flatten`) works as usual. The shapes of SST's own components ship with this crate; your own
-//! `sst.Linkable`s bring their own `Deserialize` structs.
+//! serde maps fields to link names, so `rename_all`, `rename`, `default`, and `flatten` all work as usual.
 
 pub use error::Error;
 pub use links::Links;
