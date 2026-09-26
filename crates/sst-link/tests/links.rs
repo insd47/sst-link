@@ -18,6 +18,7 @@ struct Resources {
     registry: Registry,
     #[links(name = "RouterStorage")]
     storage: Bucket,
+    r#type: Bucket,
 }
 
 const CHILD: &str = "SST_LINK_TEST_CHILD";
@@ -37,6 +38,7 @@ fn loads_every_link_at_once() {
         assert_eq!(resources.key.value, "secret");
         assert_eq!(resources.registry.audience, "crates.kitpa.org");
         assert_eq!(resources.storage.name, "bucket");
+        assert_eq!(resources.r#type.name, "type");
         return;
     }
 
@@ -55,6 +57,7 @@ fn loads_every_link_at_once() {
         ("Key", r#"{"value":"secret","type":"sst.sst.Secret"}"#),
         ("Registry", r#"{"audience":"crates.kitpa.org","organization":"1"}"#),
         ("RouterStorage", r#"{"name":"bucket","type":"sst.aws.Bucket"}"#),
+        ("Type", r#"{"name":"type"}"#),
     ]));
 }
 

@@ -7,6 +7,9 @@
 - Publishing = a push to `main` that touches the crates. `.github/workflows/publish.yml` runs the checks and
   `release-plz release`, which publishes only versions missing from crates.io (`sst-link-derive` first). No tags, no
   GitHub releases (`release-plz.toml`).
+- The very first release of each crate can't use trusted publishing (`rust-lang/crates-io-auth-action` only works for
+  crates that already exist with a Trusted Publisher configured). The owner publishes `0.1.0` by hand
+  (`sst-link-derive` first), then configures Trusted Publishing for both crates on crates.io.
 - Agents never publish or push. After changing crate code, stop and let the owner push.
 
 ## Conventions
