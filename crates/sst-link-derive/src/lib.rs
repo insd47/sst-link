@@ -1,25 +1,24 @@
 use proc_macro::TokenStream;
-use syn::{DeriveInput, Error, parse_macro_input};
+use quote::quote;
+use syn::{DeriveInput, parse_macro_input};
 
-mod links;
-
-/// Derives `sst_link::Links` for a struct with named fields.
+/// Implements `sst_link::Links` for a `serde::Deserialize` struct.
 ///
 /// ```ignore
-/// #[derive(Links)]
+/// #[derive(Deserialize, Links)]
+/// #[serde(rename_all = "PascalCase")]
 /// struct Resources {
-///     key: sst_link::Secret,          // link "Key"
-///     #[links(name = "RouterStorage")]
-///     storage: sst_link::Bucket,
+///     key: sst_link::Secret,
 /// }
 /// ```
-///
-/// - Each field reads the link named after it in PascalCase (`registry_key` → `RegistryKey`).
-/// - `#[links(name = "…")]` overrides the name for one field.
-/// - Field types only need `serde::Deserialize`.
-#[proc_macro_derive(Links, attributes(links))]
+#[proc_macro_derive(Links)]
 pub fn derive_links(input: TokenStream) -> TokenStream {
-    links::derive(parse_macro_input!(input as DeriveInput))
-        .unwrap_or_else(Error::into_compile_error)
-        .into()
+    let input = parse_macro_input!(input as DeriveInput);
+    let ident = &input.ident;
+    let (implementation, arguments, clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #implementation ::sst_link::Links for #ident #arguments #clause {}
+    }
+    .into()
 }

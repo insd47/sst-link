@@ -12,11 +12,9 @@ repository = "https://github.com/insd47/sst-link"
 [workspace.dependencies]
 sst-link-derive = { version = "=0.1.0", path = "crates/sst-link-derive" }
 
-heck = "0.5"
-proc-macro2 = "1"
 quote = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sst_sdk = "4"
-syn = { version = "2", features = ["full"] }
+syn = "2"
 thiserror = "2"
