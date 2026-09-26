@@ -1,0 +1,8 @@
+[[package]]
+name = "sst-link"
+git_tag_name = "v{{ version }}"
+
+[[package]]
+name = "sst-link-derive"
+git_tag_enable = false
+git_release_enable = false
