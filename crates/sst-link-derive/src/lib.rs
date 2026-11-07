@@ -8,7 +8,7 @@ use syn::{DeriveInput, parse_macro_input};
 /// #[derive(Deserialize, Links)]
 /// #[serde(rename_all = "PascalCase")]
 /// struct Resources {
-///     key: sst_link::Secret,
+///     key: sst_link::sst::Secret,
 /// }
 /// ```
 #[proc_macro_derive(Links)]

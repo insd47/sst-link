@@ -5,7 +5,8 @@
 //!
 //! ```no_run
 //! use serde::Deserialize;
-//! use sst_link::{Bucket, Links, Secret};
+//! use sst_link::sst::{Secret, aws::Bucket};
+//! use sst_link::Links;
 //!
 //! #[derive(Deserialize, Links)]
 //! #[serde(rename_all = "PascalCase")]
@@ -24,8 +25,7 @@
 pub use error::Error;
 pub use links::Links;
 pub use sst_link_derive::Links;
-pub use types::{App, Bucket, Dynamo, Function, Realtime, Router, Secret};
 
 mod error;
 mod links;
-mod types;
+pub mod sst;
