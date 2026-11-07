@@ -16,3 +16,6 @@ serde_json.workspace = true
 sst-link-derive.workspace = true
 sst_sdk.workspace = true
 thiserror.workspace = true
+
+[lints]
+workspace = true
