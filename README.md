@@ -15,7 +15,8 @@ new sst.aws.Function('Api', { handler: '.api', runtime: 'rust', link: [key, asse
 
 ```rust
 use serde::Deserialize;
-use sst_link::{Bucket, Links, Secret};
+use sst_link::Links;
+use sst_link::sst::{Secret, aws::Bucket};
 
 #[derive(Deserialize, Links)]
 #[serde(rename_all = "PascalCase")]
@@ -36,13 +37,13 @@ A field can be any `Deserialize` type. The shapes of SST's own components ship w
 
 | Type | Component | Fields |
 | --- | --- | --- |
-| `App` | linked to every function | `name`, `stage` |
-| `Bucket` | `sst.aws.Bucket` | `name` |
-| `Dynamo` | `sst.aws.Dynamo` | `name` |
-| `Function` | `sst.aws.Function` | `name` |
-| `Realtime` | `sst.aws.Realtime` | `endpoint`, `authorizer` |
-| `Router` | `sst.aws.Router` | `url` |
-| `Secret` | `sst.Secret` | `value` (no `Debug`, so it can't end up in a log) |
+| `sst::App` | linked to every function | `name`, `stage` |
+| `sst::aws::Bucket` | `sst.aws.Bucket` | `name` |
+| `sst::aws::Dynamo` | `sst.aws.Dynamo` | `name` |
+| `sst::aws::Function` | `sst.aws.Function` | `name` |
+| `sst::aws::Realtime` | `sst.aws.Realtime` | `endpoint`, `authorizer` |
+| `sst::aws::Router` | `sst.aws.Router` | `url` |
+| `sst::Secret` | `sst.Secret` | `value` (no `Debug`, so it can't end up in a log) |
 
 Your own `sst.Linkable` (or a component's `getSSTLink()`) brings its own struct:
 

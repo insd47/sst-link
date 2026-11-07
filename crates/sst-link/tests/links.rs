@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use sst_link::{App, Bucket, Dynamo, Function, Links, Realtime, Router, Secret};
+use sst_link::{Links, sst};
 use std::process::Command;
 
 #[derive(Deserialize)]
@@ -10,16 +10,16 @@ struct Registry {
 #[derive(Deserialize, Links)]
 #[serde(rename_all = "PascalCase")]
 struct Resources {
-    app: App,
-    table: Dynamo,
-    judge: Function,
-    realtime: Realtime,
-    router: Router,
-    key: Secret,
+    app: sst::App,
+    table: sst::aws::Dynamo,
+    judge: sst::aws::Function,
+    realtime: sst::aws::Realtime,
+    router: sst::aws::Router,
+    key: sst::Secret,
     registry: Registry,
     #[serde(rename = "RouterStorage")]
-    storage: Bucket,
-    r#type: Bucket,
+    storage: sst::aws::Bucket,
+    r#type: sst::aws::Bucket,
 }
 
 const CHILD: &str = "SST_LINK_TEST_CHILD";
